@@ -1,0 +1,117 @@
+# GoReleaser configuration for Terraform Provider
+# https://goreleaser.com
+
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+      - -trimpath
+    ldflags:
+      - '-s -w -X main.version={{.Version}}'
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - '7'
+    ignore:
+      - goos: darwin
+        goarch: arm
+      - goos: windows
+        goarch: arm
+      - goos: windows
+        goarch: arm64
+    binary: '{{ .ProjectName }}_v{{ .Version }}'
+
+archives:
+  - format: zip
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  algorithm: sha256
+
+signs:
+  - artifacts: checksum
+    args:
+      - "--batch"
+      - "--local-user"
+      - "{{ .Env.GPG_FINGERPRINT }}"
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
+
+release:
+  draft: false
+  prerelease: auto
+  mode: replace
+  header: |
+    ## Terraform Provider for VDSina v{{ .Version }}
+    
+    **Release Date:** {{ .Date }}
+    
+    ### Installation
+    
+    ```hcl
+    terraform {
+      required_providers {
+        vdsina = {
+          source  = "scinfra-pro/vdsina"
+          version = "~> {{ .Version }}"
+        }
+      }
+    }
+    ```
+  footer: |
+    ### Checksums
+    
+    All artifacts are signed with GPG. The public key is available at:
+    https://github.com/scinfra-pro.gpg
+    
+    ### Verification
+    
+    ```bash
+    # Verify checksum signature
+    gpg --verify terraform-provider-vdsina_{{ .Version }}_SHA256SUMS.sig \
+                 terraform-provider-vdsina_{{ .Version }}_SHA256SUMS
+    
+    # Verify archive checksum
+    shasum -a 256 -c terraform-provider-vdsina_{{ .Version }}_SHA256SUMS
+    ```
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - 'typo'
+  groups:
+    - title: 'Features'
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: 'Bug Fixes'
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: 'Enhancements'
+      regexp: '^.*?enhance(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: 'Other'
+      order: 999

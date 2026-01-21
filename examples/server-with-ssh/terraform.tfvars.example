@@ -1,0 +1,18 @@
+# Copy this file to terraform.tfvars and fill in your values
+# cp terraform.tfvars.example terraform.tfvars
+
+# Required: VDSina API token (get from https://my.vdsina.com/account/api)
+vdsina_api_token = "your-api-token-here"
+
+# Optional: API base URL (default: https://userapi.vdsina.com/v1)
+vdsina_base_url  = "https://userapi.vdsina.com/v1"
+
+# Required: SSH public key for server access
+ssh_public_key   = "ssh-ed25519 AAAA... your-key-comment"
+
+# Optional - defaults are provided
+# datacenter_id  = 4   # Amsterdam
+# server_plan_id = 1   # 2 RAM / 1 CPU / 40 NVMe
+# template_id    = 23  # Ubuntu 24.04
+# server_name    = "app-server"
+# hostname       = "app.example.com"
