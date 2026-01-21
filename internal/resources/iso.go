@@ -157,16 +157,36 @@ func isoRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag
 		return nil
 	}
 
-	d.Set("name", iso.Name)
-	d.Set("full_name", iso.FullName)
-	d.Set("status", iso.Status)
-	d.Set("status_text", iso.StatusText)
-	d.Set("created", iso.Created)
-	d.Set("updated", iso.Updated)
-	d.Set("end", iso.End)
-	d.Set("file_size", iso.File.Size)
-	d.Set("file_md5", iso.File.MD5)
-	d.Set("attached", iso.Attached)
+	if err := d.Set("name", iso.Name); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("full_name", iso.FullName); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status", iso.Status); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status_text", iso.StatusText); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("created", iso.Created); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("updated", iso.Updated); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("end", iso.End); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("file_size", iso.File.Size); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("file_md5", iso.File.MD5); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("attached", iso.Attached); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }

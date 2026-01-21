@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/scinfra-pro/terraform-provider-vdsina/internal/client"
+	"github.com/scinfra-pro/terraform-provider-vdsina/internal/models"
 )
 
 func limitSchema(description string) *schema.Schema {
@@ -65,6 +66,14 @@ func AccountLimitsDataSource() *schema.Resource {
 	}
 }
 
+func limitToMap(l models.LimitInfo) []map[string]interface{} {
+	return []map[string]interface{}{{
+		"max":       l.Max,
+		"now":       l.Now,
+		"child_max": l.ChildMax,
+	}}
+}
+
 func accountLimitsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	c := meta.(*client.Client)
 
@@ -75,85 +84,57 @@ func accountLimitsRead(ctx context.Context, d *schema.ResourceData, meta interfa
 
 	d.SetId("account_limits")
 
-	d.Set("server", []map[string]interface{}{{
-		"max":       limits.Server.Max,
-		"now":       limits.Server.Now,
-		"child_max": limits.Server.ChildMax,
-	}})
-
-	d.Set("server_ip4", []map[string]interface{}{{
-		"max":       limits.ServerIP4.Max,
-		"now":       limits.ServerIP4.Now,
-		"child_max": limits.ServerIP4.ChildMax,
-	}})
-
-	d.Set("server_ip6", []map[string]interface{}{{
-		"max":       limits.ServerIP6.Max,
-		"now":       limits.ServerIP6.Now,
-		"child_max": limits.ServerIP6.ChildMax,
-	}})
-
-	d.Set("iso", []map[string]interface{}{{
-		"max":       limits.ISO.Max,
-		"now":       limits.ISO.Now,
-		"child_max": limits.ISO.ChildMax,
-	}})
-
-	d.Set("backup", []map[string]interface{}{{
-		"max":       limits.Backup.Max,
-		"now":       limits.Backup.Now,
-		"child_max": limits.Backup.ChildMax,
-	}})
+	if err := d.Set("server", limitToMap(limits.Server)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("server_ip4", limitToMap(limits.ServerIP4)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("server_ip6", limitToMap(limits.ServerIP6)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("iso", limitToMap(limits.ISO)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("backup", limitToMap(limits.Backup)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	if limits.SSL != nil {
-		d.Set("ssl", []map[string]interface{}{{
-			"max":       limits.SSL.Max,
-			"now":       limits.SSL.Now,
-			"child_max": limits.SSL.ChildMax,
-		}})
+		if err := d.Set("ssl", limitToMap(*limits.SSL)); err != nil {
+			return diag.FromErr(err)
+		}
 	} else {
-		d.Set("ssl", []map[string]interface{}{})
+		if err := d.Set("ssl", []map[string]interface{}{}); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	if limits.Domain != nil {
-		d.Set("domain", []map[string]interface{}{{
-			"max":       limits.Domain.Max,
-			"now":       limits.Domain.Now,
-			"child_max": limits.Domain.ChildMax,
-		}})
+		if err := d.Set("domain", limitToMap(*limits.Domain)); err != nil {
+			return diag.FromErr(err)
+		}
 	} else {
-		d.Set("domain", []map[string]interface{}{})
+		if err := d.Set("domain", []map[string]interface{}{}); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	d.Set("dns", []map[string]interface{}{{
-		"max":       limits.DNS.Max,
-		"now":       limits.DNS.Now,
-		"child_max": limits.DNS.ChildMax,
-	}})
-
-	d.Set("extdisk_hdd", []map[string]interface{}{{
-		"max":       limits.ExtdiskHDD.Max,
-		"now":       limits.ExtdiskHDD.Now,
-		"child_max": limits.ExtdiskHDD.ChildMax,
-	}})
-
-	d.Set("extdisk_nvme", []map[string]interface{}{{
-		"max":       limits.ExtdiskNVMe.Max,
-		"now":       limits.ExtdiskNVMe.Now,
-		"child_max": limits.ExtdiskNVMe.ChildMax,
-	}})
-
-	d.Set("reserve_ip", []map[string]interface{}{{
-		"max":       limits.ReserveIP.Max,
-		"now":       limits.ReserveIP.Now,
-		"child_max": limits.ReserveIP.ChildMax,
-	}})
-
-	d.Set("gpu", []map[string]interface{}{{
-		"max":       limits.GPU.Max,
-		"now":       limits.GPU.Now,
-		"child_max": limits.GPU.ChildMax,
-	}})
+	if err := d.Set("dns", limitToMap(limits.DNS)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("extdisk_hdd", limitToMap(limits.ExtdiskHDD)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("extdisk_nvme", limitToMap(limits.ExtdiskNVMe)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("reserve_ip", limitToMap(limits.ReserveIP)); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("gpu", limitToMap(limits.GPU)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }

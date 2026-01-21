@@ -1,6 +1,6 @@
 YOUR_NAME = scinfra-pro
 BINARY_NAME=terraform-provider-vdsina
-VERSION=0.1.0
+VERSION=0.2.0
 GOOS?=$(shell go env GOOS)
 GOARCH?=$(shell go env GOARCH)
 

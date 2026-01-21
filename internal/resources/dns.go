@@ -126,15 +126,33 @@ func dnsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag
 		return nil
 	}
 
-	d.Set("name", zone.Name)
-	d.Set("full_name", zone.FullName)
-	d.Set("status", zone.Status)
-	d.Set("status_text", zone.StatusText)
-	d.Set("real", zone.Real)
-	d.Set("created", zone.Created)
-	d.Set("updated", zone.Updated)
-	d.Set("end", zone.End)
-	d.Set("can_delete", zone.Can.Delete)
+	if err := d.Set("name", zone.Name); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("full_name", zone.FullName); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status", zone.Status); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status_text", zone.StatusText); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("real", zone.Real); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("created", zone.Created); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("updated", zone.Updated); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("end", zone.End); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_delete", zone.Can.Delete); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }

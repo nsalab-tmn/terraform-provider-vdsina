@@ -155,7 +155,9 @@ func backupsRead(ctx context.Context, d *schema.ResourceData, meta interface{}) 
 		backupList[i] = backupMap
 	}
 
-	d.Set("backups", backupList)
+	if err := d.Set("backups", backupList); err != nil {
+		return diag.FromErr(fmt.Errorf("unable to set backups in state: %w", err))
+	}
 
 	return nil
 }

@@ -248,31 +248,65 @@ func serverRead(ctx context.Context, d *schema.ResourceData, meta interface{}) d
 		return nil
 	}
 
-	d.Set("name", server.Name)
-	d.Set("full_name", server.FullName)
-	d.Set("status", server.Status)
-	d.Set("status_text", server.StatusText)
-	d.Set("created", server.Created)
-	d.Set("end", server.End)
-	d.Set("host", server.Host)
-	d.Set("autoprolong", server.Autoprolong)
+	if err := d.Set("name", server.Name); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("full_name", server.FullName); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status", server.Status); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status_text", server.StatusText); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("created", server.Created); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("end", server.End); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("host", server.Host); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("autoprolong", server.Autoprolong); err != nil {
+		return diag.FromErr(err)
+	}
 
 	if server.IP.IP != "" {
-		d.Set("ip", server.IP.IP)
+		if err := d.Set("ip", server.IP.IP); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	if server.IPLocal.IP != "" {
-		d.Set("ip_local", server.IPLocal.IP)
+		if err := d.Set("ip_local", server.IPLocal.IP); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
-	d.Set("datacenter", server.Datacenter.ID)
-	d.Set("datacenter_name", server.Datacenter.Name)
-	d.Set("server_plan", server.ServerPlan.ID)
-	d.Set("plan_name", server.ServerPlan.Name)
-	d.Set("template", server.Template.ID)
-	d.Set("template_name", server.Template.Name)
+	if err := d.Set("datacenter", server.Datacenter.ID); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("datacenter_name", server.Datacenter.Name); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("server_plan", server.ServerPlan.ID); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("plan_name", server.ServerPlan.Name); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("template", server.Template.ID); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("template_name", server.Template.Name); err != nil {
+		return diag.FromErr(err)
+	}
 
 	if server.SSHKey != nil {
-		d.Set("ssh_key", server.SSHKey.ID)
+		if err := d.Set("ssh_key", server.SSHKey.ID); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil

@@ -150,21 +150,41 @@ func dnsRecordRead(ctx context.Context, d *schema.ResourceData, meta interface{}
 		return nil
 	}
 
-	d.Set("zone_id", zoneID)
-	d.Set("host", record.Host)
-	d.Set("type", record.Type)
-	d.Set("value", record.Value)
-	d.Set("timestamp", record.Timestamp)
-	d.Set("can_update", record.Can.Update)
-	d.Set("can_delete", record.Can.Delete)
+	if err := d.Set("zone_id", zoneID); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("host", record.Host); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("type", record.Type); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("value", record.Value); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("timestamp", record.Timestamp); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_update", record.Can.Update); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_delete", record.Can.Delete); err != nil {
+		return diag.FromErr(err)
+	}
 
 	if record.Priority != nil {
-		d.Set("priority", *record.Priority)
+		if err := d.Set("priority", *record.Priority); err != nil {
+			return diag.FromErr(err)
+		}
 	} else {
-		d.Set("priority", 0)
+		if err := d.Set("priority", 0); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 	if record.Tag != nil {
-		d.Set("tag", *record.Tag)
+		if err := d.Set("tag", *record.Tag); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -242,7 +262,9 @@ func dnsRecordImportState(ctx context.Context, d *schema.ResourceData, meta inte
 		return nil, err
 	}
 
-	d.Set("zone_id", zoneID)
+	if err := d.Set("zone_id", zoneID); err != nil {
+		return nil, err
+	}
 
 	return []*schema.ResourceData{d}, nil
 }

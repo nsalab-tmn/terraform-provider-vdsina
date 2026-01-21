@@ -60,10 +60,19 @@ func accountBalanceRead(ctx context.Context, d *schema.ResourceData, meta interf
 	partner, _ := strconv.ParseFloat(balance.Partner, 64)
 
 	d.SetId("account_balance")
-	d.Set("real", real)
-	d.Set("bonus", bonus)
-	d.Set("partner", partner)
-	d.Set("total", real+bonus+partner)
+
+	if err := d.Set("real", real); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("bonus", bonus); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("partner", partner); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("total", real+bonus+partner); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }

@@ -71,13 +71,28 @@ func accountRead(ctx context.Context, d *schema.ResourceData, meta interface{}) 
 	}
 
 	d.SetId(strconv.Itoa(account.Account.ID))
-	d.Set("account_id", account.Account.ID)
-	d.Set("name", account.Account.Name)
-	d.Set("created", account.Created)
-	d.Set("forecast", account.Forecast)
-	d.Set("can_add_user", account.Can.AddUser)
-	d.Set("can_add_service", account.Can.AddService)
-	d.Set("can_convert_to_cash", account.Can.ConvertToCash)
+
+	if err := d.Set("account_id", account.Account.ID); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("name", account.Account.Name); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("created", account.Created); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("forecast", account.Forecast); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_add_user", account.Can.AddUser); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_add_service", account.Can.AddService); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_convert_to_cash", account.Can.ConvertToCash); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }

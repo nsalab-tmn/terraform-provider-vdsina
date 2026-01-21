@@ -72,7 +72,9 @@ func serverRebootCreate(ctx context.Context, d *schema.ResourceData, meta interf
 	}
 
 	d.SetId(strconv.Itoa(serverID))
-	d.Set("last_reboot", time.Now().Format(time.RFC3339))
+	if err := d.Set("last_reboot", time.Now().Format(time.RFC3339)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -93,7 +95,9 @@ func serverRebootUpdate(ctx context.Context, d *schema.ResourceData, meta interf
 			return diag.FromErr(fmt.Errorf("failed to reboot server: %w", err))
 		}
 
-		d.Set("last_reboot", time.Now().Format(time.RFC3339))
+		if err := d.Set("last_reboot", time.Now().Format(time.RFC3339)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -168,7 +172,9 @@ func serverReinstallCreate(ctx context.Context, d *schema.ResourceData, meta int
 	}
 
 	d.SetId(strconv.Itoa(serverID))
-	d.Set("last_reinstall", time.Now().Format(time.RFC3339))
+	if err := d.Set("last_reinstall", time.Now().Format(time.RFC3339)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -191,7 +197,9 @@ func serverReinstallUpdate(ctx context.Context, d *schema.ResourceData, meta int
 			return diag.FromErr(fmt.Errorf("failed to reinstall server: %w", err))
 		}
 
-		d.Set("last_reinstall", time.Now().Format(time.RFC3339))
+		if err := d.Set("last_reinstall", time.Now().Format(time.RFC3339)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -259,11 +267,15 @@ func serverPasswordCreate(ctx context.Context, d *schema.ResourceData, meta inte
 		if err != nil {
 			return diag.FromErr(fmt.Errorf("failed to get server password: %w", err))
 		}
-		d.Set("password", password)
+		if err := d.Set("password", password); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	d.SetId(strconv.Itoa(serverID))
-	d.Set("last_updated", time.Now().Format(time.RFC3339))
+	if err := d.Set("last_updated", time.Now().Format(time.RFC3339)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -282,7 +294,9 @@ func serverPasswordRead(ctx context.Context, d *schema.ResourceData, meta interf
 		return nil
 	}
 
-	d.Set("password", password)
+	if err := d.Set("password", password); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -308,10 +322,14 @@ func serverPasswordUpdate(ctx context.Context, d *schema.ResourceData, meta inte
 			if err != nil {
 				return diag.FromErr(fmt.Errorf("failed to get new server password: %w", err))
 			}
-			d.Set("password", newPassword)
+			if err := d.Set("password", newPassword); err != nil {
+				return diag.FromErr(err)
+			}
 		}
 
-		d.Set("last_updated", time.Now().Format(time.RFC3339))
+		if err := d.Set("last_updated", time.Now().Format(time.RFC3339)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -409,7 +427,9 @@ func serverPlanChangeCreate(ctx context.Context, d *schema.ResourceData, meta in
 	}
 
 	d.SetId(strconv.Itoa(serverID))
-	d.Set("last_changed", time.Now().Format(time.RFC3339))
+	if err := d.Set("last_changed", time.Now().Format(time.RFC3339)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -445,7 +465,9 @@ func serverPlanChangeUpdate(ctx context.Context, d *schema.ResourceData, meta in
 			return diag.FromErr(fmt.Errorf("failed to change server plan: %w", err))
 		}
 
-		d.Set("last_changed", time.Now().Format(time.RFC3339))
+		if err := d.Set("last_changed", time.Now().Format(time.RFC3339)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -502,7 +524,9 @@ func serverProlongCreate(ctx context.Context, d *schema.ResourceData, meta inter
 	}
 
 	d.SetId(strconv.Itoa(serverID))
-	d.Set("last_prolonged", time.Now().Format(time.RFC3339))
+	if err := d.Set("last_prolonged", time.Now().Format(time.RFC3339)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -522,7 +546,9 @@ func serverProlongUpdate(ctx context.Context, d *schema.ResourceData, meta inter
 			return diag.FromErr(fmt.Errorf("failed to prolong server: %w", err))
 		}
 
-		d.Set("last_prolonged", time.Now().Format(time.RFC3339))
+		if err := d.Set("last_prolonged", time.Now().Format(time.RFC3339)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil
@@ -580,7 +606,9 @@ func serverISOCreate(ctx context.Context, d *schema.ResourceData, meta interface
 	}
 
 	d.SetId(fmt.Sprintf("%d:%d", serverID, isoID))
-	d.Set("last_attached", time.Now().Format(time.RFC3339))
+	if err := d.Set("last_attached", time.Now().Format(time.RFC3339)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -611,7 +639,9 @@ func serverISOUpdate(ctx context.Context, d *schema.ResourceData, meta interface
 		}
 
 		d.SetId(fmt.Sprintf("%d:%d", serverID, isoID))
-		d.Set("last_attached", time.Now().Format(time.RFC3339))
+		if err := d.Set("last_attached", time.Now().Format(time.RFC3339)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil

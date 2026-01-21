@@ -24,7 +24,7 @@ terraform {
   required_providers {
     vdsina = {
       source  = "scinfra-pro/vdsina"
-      version = "~> 0.1.0"
+      version = "~> 0.2.0"
     }
   }
 }
@@ -39,7 +39,7 @@ provider "vdsina" {
 Download the appropriate binary from the [releases page](https://github.com/scinfra-pro/terraform-provider-vdsina/releases) and place it in:
 
 ```
-~/.terraform.d/plugins/registry.terraform.io/scinfra-pro/vdsina/0.1.0/<os>_<arch>/
+~/.terraform.d/plugins/registry.terraform.io/scinfra-pro/vdsina/0.2.0/<os>_<arch>/
 ```
 
 ## Configuration

@@ -143,7 +143,9 @@ func isoListRead(ctx context.Context, d *schema.ResourceData, meta interface{}) 
 		isoList[i] = isoMap
 	}
 
-	d.Set("isos", isoList)
+	if err := d.Set("isos", isoList); err != nil {
+		return diag.FromErr(fmt.Errorf("unable to set isos in state: %w", err))
+	}
 
 	return nil
 }

@@ -168,19 +168,43 @@ func backupRead(ctx context.Context, d *schema.ResourceData, meta interface{}) d
 	}
 
 	if backup.Server != nil {
-		d.Set("server_id", backup.Server.ID)
+		if err := d.Set("server_id", backup.Server.ID); err != nil {
+			return diag.FromErr(err)
+		}
 	}
-	d.Set("name", backup.Name)
-	d.Set("full_name", backup.FullName)
-	d.Set("status", backup.Status)
-	d.Set("status_text", backup.StatusText)
-	d.Set("datacenter_id", backup.Datacenter.ID)
-	d.Set("created", backup.Created)
-	d.Set("updated", backup.Updated)
-	d.Set("end", backup.End)
-	d.Set("can_update", backup.Can.Update)
-	d.Set("can_prolong", backup.Can.Prolong)
-	d.Set("can_delete", backup.Can.Delete)
+	if err := d.Set("name", backup.Name); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("full_name", backup.FullName); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status", backup.Status); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("status_text", backup.StatusText); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("datacenter_id", backup.Datacenter.ID); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("created", backup.Created); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("updated", backup.Updated); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("end", backup.End); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_update", backup.Can.Update); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_prolong", backup.Can.Prolong); err != nil {
+		return diag.FromErr(err)
+	}
+	if err := d.Set("can_delete", backup.Can.Delete); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -290,7 +314,9 @@ func backupRestoreCreate(ctx context.Context, d *schema.ResourceData, meta inter
 	}
 
 	d.SetId(fmt.Sprintf("%d:%d", backupID, serverID))
-	d.Set("last_restored", time.Now().Format(time.RFC3339))
+	if err := d.Set("last_restored", time.Now().Format(time.RFC3339)); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }
@@ -311,7 +337,9 @@ func backupRestoreUpdate(ctx context.Context, d *schema.ResourceData, meta inter
 			return diag.FromErr(fmt.Errorf("failed to restore backup: %w", err))
 		}
 
-		d.Set("last_restored", time.Now().Format(time.RFC3339))
+		if err := d.Set("last_restored", time.Now().Format(time.RFC3339)); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil

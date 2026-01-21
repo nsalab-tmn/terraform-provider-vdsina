@@ -85,9 +85,13 @@ func sshKeyRead(ctx context.Context, d *schema.ResourceData, meta interface{}) d
 		return nil
 	}
 
-	d.Set("name", key.Name)
+	if err := d.Set("name", key.Name); err != nil {
+		return diag.FromErr(err)
+	}
 	if key.Data != "" {
-		d.Set("data", key.Data)
+		if err := d.Set("data", key.Data); err != nil {
+			return diag.FromErr(err)
+		}
 	}
 
 	return nil

@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-01-21
+## [0.2.0] - 2026-01-21
+
+### Changed
+
+- Refactored all `d.Set()` calls to properly check and return errors
+- Follows the same error handling pattern as terraform-provider-aeza
+- Improved code quality for golangci-lint compliance
+
+## [0.1.0] - 2026-01-21 (unreleased)
 
 ### Added
 

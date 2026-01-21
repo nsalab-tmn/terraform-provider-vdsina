@@ -111,7 +111,9 @@ func dnsZonesRead(ctx context.Context, d *schema.ResourceData, meta interface{})
 		}
 	}
 
-	d.Set("zones", zoneList)
+	if err := d.Set("zones", zoneList); err != nil {
+		return diag.FromErr(fmt.Errorf("unable to set zones in state: %w", err))
+	}
 
 	return nil
 }
