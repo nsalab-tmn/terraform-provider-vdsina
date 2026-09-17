@@ -7,6 +7,7 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -52,23 +53,20 @@ func parseAPIError(statusCode int, body []byte) error {
 	}
 }
 
+// hasStatusCode unwraps err, since the client methods wrap API errors with %w.
+func hasStatusCode(err error, statusCode int) bool {
+	var apiErr *APIError
+	return errors.As(err, &apiErr) && apiErr.StatusCode == statusCode
+}
+
 func IsNotFound(err error) bool {
-	if apiErr, ok := err.(*APIError); ok {
-		return apiErr.StatusCode == 404
-	}
-	return false
+	return hasStatusCode(err, 404)
 }
 
 func IsUnauthorized(err error) bool {
-	if apiErr, ok := err.(*APIError); ok {
-		return apiErr.StatusCode == 401
-	}
-	return false
+	return hasStatusCode(err, 401)
 }
 
 func IsForbidden(err error) bool {
-	if apiErr, ok := err.(*APIError); ok {
-		return apiErr.StatusCode == 403
-	}
-	return false
+	return hasStatusCode(err, 403)
 }

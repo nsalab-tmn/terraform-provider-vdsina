@@ -8,6 +8,7 @@ package resources
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -32,9 +33,9 @@ func ServerResource() *schema.Resource {
 		},
 
 		Timeouts: &schema.ResourceTimeout{
-			Create: schema.DefaultTimeout(10 * time.Minute),
+			Create: schema.DefaultTimeout(20 * time.Minute),
 			Update: schema.DefaultTimeout(5 * time.Minute),
-			Delete: schema.DefaultTimeout(5 * time.Minute),
+			Delete: schema.DefaultTimeout(10 * time.Minute),
 		},
 
 		Schema: map[string]*schema.Schema{
@@ -231,6 +232,10 @@ func serverCreate(ctx context.Context, d *schema.ResourceData, meta interface{})
 		_ = c.UpdateServer(ctx, id, updateReq)
 	}
 
+	if err := waitForServerReady(ctx, c, id, d.Timeout(schema.TimeoutCreate)); err != nil {
+		return diag.FromErr(err)
+	}
+
 	return serverRead(ctx, d, meta)
 }
 
@@ -244,6 +249,16 @@ func serverRead(ctx context.Context, d *schema.ResourceData, meta interface{}) d
 
 	server, err := c.GetServer(ctx, id)
 	if err != nil {
+		if client.IsNotFound(err) {
+			log.Printf("[WARN] VDSina server %d not found, removing from state", id)
+			d.SetId("")
+			return nil
+		}
+		return diag.FromErr(fmt.Errorf("failed to read server %d: %w", id, err))
+	}
+
+	if server.Status == "deleted" {
+		log.Printf("[WARN] VDSina server %d is deleted, removing from state", id)
 		d.SetId("")
 		return nil
 	}
@@ -353,7 +368,15 @@ func serverDelete(ctx context.Context, d *schema.ResourceData, meta interface{})
 
 	err = c.DeleteServer(ctx, id)
 	if err != nil {
+		if client.IsNotFound(err) {
+			d.SetId("")
+			return nil
+		}
 		return diag.FromErr(fmt.Errorf("failed to delete server: %w", err))
+	}
+
+	if err := waitForServerDeleted(ctx, c, id, d.Timeout(schema.TimeoutDelete)); err != nil {
+		return diag.FromErr(err)
 	}
 
 	d.SetId("")

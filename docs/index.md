@@ -15,8 +15,8 @@ The VDSina provider is used to manage resources in the [VDSina](https://vdsina.c
 terraform {
   required_providers {
     vdsina = {
-      source  = "scinfra-pro/vdsina"
-      version = "~> 0.2.0"
+      source  = "nsalab-tmn/vdsina"
+      version = "~> 0.3.0"
     }
   }
 }

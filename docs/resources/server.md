@@ -90,6 +90,14 @@ resource "vdsina_server" "restored" {
 * `template_name` - (String) OS template name.
 * `plan_name` - (String) Server plan name.
 
+## Timeouts
+
+* `create` - (Default `20m`) Creation waits until the server has status `active` and a public IP. Statuses `block`, `notpaid` and `deleted` fail the create immediately.
+* `update` - (Default `5m`)
+* `delete` - (Default `10m`) Deletion waits until the API returns 404 or status `deleted` for the server.
+
+Reading the server removes it from state only when the API returns 404 or status `deleted`; any other API error fails the refresh instead.
+
 ## Import
 
 Servers can be imported using the server ID:
