@@ -39,3 +39,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          # Several tags can point at one commit (v0.3.0-rc.3 and v0.3.0): release the tag that triggered the run.
+          GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
