@@ -8,6 +8,7 @@ package resources
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -81,8 +82,12 @@ func sshKeyRead(ctx context.Context, d *schema.ResourceData, meta interface{}) d
 
 	key, err := c.GetSSHKey(ctx, id)
 	if err != nil {
-		d.SetId("")
-		return nil
+		if client.IsNotFound(err) {
+			log.Printf("[WARN] VDSina SSH key %d not found, removing from state", id)
+			d.SetId("")
+			return nil
+		}
+		return diag.FromErr(fmt.Errorf("failed to read SSH key %d: %w", id, err))
 	}
 
 	if err := d.Set("name", key.Name); err != nil {

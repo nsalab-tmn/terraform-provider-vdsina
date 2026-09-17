@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-17
+
+First release of the `nsalab-tmn/vdsina` fork.
+
+### Fixed
+
+- `vdsina_server` create waits until the server is `active` with a public IP, so `ip` is known in the same apply (previously it returned right after `POST /server` with no IP). `block`, `notpaid` and `deleted` fail the create.
+- `vdsina_server` delete waits until the server is gone (404 or status `deleted`).
+- `vdsina_server` and `vdsina_ssh_key` read remove the resource from state only on 404 (or a `deleted` server); other API errors are returned instead of silently dropping the resource and planning a re-create.
+- `IsNotFound`, `IsUnauthorized` and `IsForbidden` recognise wrapped API errors.
+
+### Changed
+
+- `vdsina_server` default timeouts: create 20m (was 10m), delete 10m (was 5m).
+- Registry address `nsalab-tmn/vdsina`.
+
 ## [0.2.0] - 2026-01-21
 
 ### Changed

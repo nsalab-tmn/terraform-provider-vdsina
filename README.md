@@ -1,10 +1,12 @@
 # Terraform Provider for VDSina
 
-[![Release](https://img.shields.io/github/v/release/scinfra-pro/terraform-provider-vdsina)](https://github.com/scinfra-pro/terraform-provider-vdsina/releases)
-[![Tests](https://github.com/scinfra-pro/terraform-provider-vdsina/actions/workflows/test.yml/badge.svg)](https://github.com/scinfra-pro/terraform-provider-vdsina/actions/workflows/test.yml)
+[![Release](https://img.shields.io/github/v/release/nsalab-tmn/terraform-provider-vdsina)](https://github.com/nsalab-tmn/terraform-provider-vdsina/releases)
+[![Tests](https://github.com/nsalab-tmn/terraform-provider-vdsina/actions/workflows/test.yml/badge.svg)](https://github.com/nsalab-tmn/terraform-provider-vdsina/actions/workflows/test.yml)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
 Terraform provider for managing resources in [VDSina](https://vdsina.com) cloud platform.
+
+This is a maintained fork of [scinfra-pro/terraform-provider-vdsina](https://github.com/scinfra-pro/terraform-provider-vdsina), published as `nsalab-tmn/vdsina`. It waits for new servers to become active with a public IP, waits for deleted servers to disappear, and no longer drops resources from state on transient API errors — see [CHANGELOG.md](CHANGELOG.md).
 
 ## Features
 
@@ -23,8 +25,8 @@ Terraform provider for managing resources in [VDSina](https://vdsina.com) cloud 
 terraform {
   required_providers {
     vdsina = {
-      source  = "scinfra-pro/vdsina"
-      version = "~> 0.2.0"
+      source  = "nsalab-tmn/vdsina"
+      version = "~> 0.3.0"
     }
   }
 }
@@ -36,10 +38,10 @@ provider "vdsina" {
 
 ### Manual Installation
 
-Download the appropriate binary from the [releases page](https://github.com/scinfra-pro/terraform-provider-vdsina/releases) and place it in:
+Download the appropriate binary from the [releases page](https://github.com/nsalab-tmn/terraform-provider-vdsina/releases) and place it in:
 
 ```
-~/.terraform.d/plugins/registry.terraform.io/scinfra-pro/vdsina/0.2.0/<os>_<arch>/
+~/.terraform.d/plugins/registry.terraform.io/nsalab-tmn/vdsina/0.3.0/<os>_<arch>/
 ```
 
 ## Configuration

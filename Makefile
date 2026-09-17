@@ -1,6 +1,6 @@
-YOUR_NAME = scinfra-pro
+YOUR_NAME = nsalab-tmn
 BINARY_NAME=terraform-provider-vdsina
-VERSION=0.2.0
+VERSION=0.3.0
 GOOS?=$(shell go env GOOS)
 GOARCH?=$(shell go env GOARCH)
 

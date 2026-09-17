@@ -71,7 +71,7 @@ release:
     terraform {
       required_providers {
         vdsina = {
-          source  = "scinfra-pro/vdsina"
+          source  = "nsalab-tmn/vdsina"
           version = "~> {{ .Version }}"
         }
       }
@@ -80,8 +80,8 @@ release:
   footer: |
     ### Checksums
     
-    All artifacts are signed with GPG. The public key is available at:
-    https://github.com/scinfra-pro.gpg
+    All artifacts are signed with GPG. The public key is `SIGNING_KEY.asc` in the repository
+    and is registered for the `nsalab-tmn` namespace in the Terraform Registry.
     
     ### Verification
     
