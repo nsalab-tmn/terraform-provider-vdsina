@@ -17,6 +17,8 @@ First release of the `nsalab-tmn/vdsina` fork.
 - `vdsina_server` delete waits until the server is gone (404 or status `deleted`).
 - `vdsina_server` and `vdsina_ssh_key` read remove the resource from state only on 404 (or a `deleted` server); other API errors are returned instead of silently dropping the resource and planning a re-create.
 - `IsNotFound`, `IsUnauthorized` and `IsForbidden` recognise wrapped API errors.
+- `vdsina_server` `template`, `ssh_key` and `host` are Computed: when omitted, the values VDSina assigns (e.g. the default hostname) no longer force a replacement on the next plan.
+- `vdsina_server` `autoprolong = false` is applied once the server is active and its failure is reported; the update sent right after `POST /server` did not take effect.
 
 ### Changed
 

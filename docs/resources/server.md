@@ -67,7 +67,7 @@ resource "vdsina_server" "restored" {
 * `name` - (String) Name of the server.
 * `template` - (Number) OS template ID. Use `vdsina_templates` data source for available templates. Mutually exclusive with `backup` and `iso`.
 * `ssh_key` - (Number) SSH key ID. Use `vdsina_ssh_keys` data source for available keys.
-* `host` - (String) Hostname for the server.
+* `host` - (String) Hostname for the server; it also sets the PTR record of the public IP. VDSina assigns a default hostname when omitted.
 * `backup` - (Number) Backup ID to restore from. Mutually exclusive with `template` and `iso`.
 * `iso` - (Number) ISO ID to install from. Mutually exclusive with `template` and `backup`.
 * `autoprolong` - (Boolean) Enable auto-renewal when balance is sufficient. Default: `true`.

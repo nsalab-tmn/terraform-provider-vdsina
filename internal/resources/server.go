@@ -57,9 +57,12 @@ func ServerResource() *schema.Resource {
 				Computed:    true,
 				Description: "Server name (can be changed after creation)",
 			},
+			// template, ssh_key and host are read back from the API, so they are Computed:
+			// when omitted from the configuration, the value VDSina assigns must not force a replacement.
 			"template": {
 				Type:          schema.TypeInt,
 				Optional:      true,
+				Computed:      true,
 				ForceNew:      true,
 				Description:   "OS template ID (mutually exclusive with backup, iso)",
 				ConflictsWith: []string{"backup", "iso"},
@@ -67,14 +70,16 @@ func ServerResource() *schema.Resource {
 			"ssh_key": {
 				Type:        schema.TypeInt,
 				Optional:    true,
+				Computed:    true,
 				ForceNew:    true,
 				Description: "SSH key ID to add to the server",
 			},
 			"host": {
 				Type:        schema.TypeString,
 				Optional:    true,
+				Computed:    true,
 				ForceNew:    true,
-				Description: "Hostname for the server",
+				Description: "Hostname for the server; VDSina assigns one when omitted",
 			},
 			"backup": {
 				Type:          schema.TypeInt,
@@ -222,18 +227,16 @@ func serverCreate(ctx context.Context, d *schema.ResourceData, meta interface{})
 
 	d.SetId(strconv.Itoa(id))
 
-	autoprolong := d.Get("autoprolong").(bool)
-
-	if !autoprolong {
-		updateReq := models.ServerUpdateRequest{
-			Autoprolong: "0",
-		}
-		time.Sleep(2 * time.Second)
-		_ = c.UpdateServer(ctx, id, updateReq)
-	}
-
 	if err := waitForServerReady(ctx, c, id, d.Timeout(schema.TimeoutCreate)); err != nil {
 		return diag.FromErr(err)
+	}
+
+	// New servers start with autoprolong on. Disable it only once the server is active:
+	// an update sent while the server was still "new" did not take effect.
+	if !d.Get("autoprolong").(bool) {
+		if err := c.UpdateServer(ctx, id, models.ServerUpdateRequest{Autoprolong: "0"}); err != nil {
+			return diag.FromErr(fmt.Errorf("server %d created, but disabling autoprolong failed: %w", id, err))
+		}
 	}
 
 	return serverRead(ctx, d, meta)
